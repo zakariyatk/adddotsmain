@@ -11,10 +11,10 @@ The Applications menu (after Products) lists Add Call. When there's a new app ve
 
 ## Automatic upload: one-time setup
 
-1. hPanel → **Files → FTP Accounts**: note the **FTP host** and the main account's **username**, or create a new account whose directory is `public_html`, and set a password.
+1. hPanel → **Files → FTP Accounts**: use the account whose directory is `/home/…/domains/adddots.com/public_html` (`u858015397.main`) and set its password. Not the main `u858015397` login, which opens in the home folder.
 2. GitHub → this repository → **Settings → Secrets and variables → Actions → New repository secret**, three times:
-   - `FTP_SERVER`: the FTP host, for example `ftp.adddots.com` or the IP shown in hPanel
+   - `FTP_SERVER`: `ftp.adddots.com`
    - `FTP_USERNAME`: the FTP username
    - `FTP_PASSWORD`: its password
-3. If the FTP account opens one level above the site (you see `public_html` when you connect), add a variable instead of a secret on the **Variables** tab: `FTP_SERVER_DIR` = `public_html/`.
+3. Don't add `FTP_SERVER_DIR`. The deploy stops with an error if the login doesn't open in the live site folder (it looks for the `call` folder of call.adddots.com there).
 4. **Actions → Deploy → Run workflow** to upload now. After that, every change to `main` goes live on its own.

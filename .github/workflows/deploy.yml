@@ -1,0 +1,64 @@
+name: Deploy
+
+# Uploads the site to Hostinger (adddots.com) after every push to main, or when
+# run by hand from Actions → Deploy → Run workflow.
+# Needs repository secrets FTP_SERVER, FTP_USERNAME and FTP_PASSWORD (see README).
+# Only files this workflow uploaded are ever replaced or removed, so other folders
+# on the server (optionbuilder/, pdfreader/, the APK in addcall/) are left alone.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://adddots.com
+    steps:
+      - uses: actions/checkout@v4
+
+      # Accepts FTP_SERVER pasted as "ftp://host:21/" or with stray spaces, and
+      # says what's wrong (without printing the secret) if it still isn't a host name.
+      - name: Check FTP secrets
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          if [ -z "$FTP_SERVER" ] || [ -z "$FTP_USERNAME" ] || [ -z "$FTP_PASSWORD" ]; then
+            echo "::error::Add the FTP_SERVER, FTP_USERNAME and FTP_PASSWORD secrets to deploy (see README)."
+            exit 1
+          fi
+          host=$(printf '%s' "$FTP_SERVER" | tr -d '[:space:]')
+          case "$host" in *://*) host=${host#*://} ;; esac
+          host=${host%%/*}
+          host=${host%%:*}
+          echo "::add-mask::$host"
+          if ! [[ "$host" =~ ^[0-9]{1,3}(\.[0-9]{1,3}){3}$ ]] && ! getent hosts "$host" > /dev/null; then
+            echo "::error::FTP_SERVER is not a host name that exists. Use the FTP hostname or IP from hPanel → Files → FTP Accounts, nothing else."
+            exit 1
+          fi
+          echo "FTP_HOST=$host" >> "$GITHUB_ENV"
+
+      - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ env.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./
+          # The site's folder on the server (./ when the FTP account opens in public_html).
+          server-dir: ${{ vars.FTP_SERVER_DIR || './' }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            README.md
+          dangerous-clean-slate: false
+          log-level: standard

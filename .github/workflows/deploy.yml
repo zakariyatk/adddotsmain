@@ -54,19 +54,6 @@ jobs:
           echo "Uploading into: $dir"
           echo "FTP_DIR=$dir" >> "$GITHUB_ENV"
 
-      # Shows the folder names the FTP account opens in, so a wrong FTP_SERVER_DIR is easy to spot.
-      - name: Show the server's folders
-        env:
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        run: |
-          echo "Top level:"
-          curl -sS --ssl-reqd --list-only -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_HOST/" || true
-          if [ "$FTP_DIR" != "./" ]; then
-            echo "Inside $FTP_DIR:"
-            curl -sS --ssl-reqd --list-only -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_HOST/$FTP_DIR" || true
-          fi
-
       - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ env.FTP_HOST }}

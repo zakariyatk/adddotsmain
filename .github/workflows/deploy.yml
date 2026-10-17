@@ -77,6 +77,14 @@ jobs:
             [ -z "$ip" ] && { echo "$h -> (none)"; continue; }
             echo "$h -> $ip: $(curl -sS -k --ssl-reqd --list-only -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$ip/" 2>&1 | tr -d '\r' | tr '\n' ' ' | cut -c1-300)"
           done
+          # Show what is under domains/ so we can find the folder adddots.com serves.
+          ls_ftp() { curl -sS -k --ssl-reqd --list-only -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_HOST/$1" 2>&1 | tr -d '\r' | grep -vx '\.\.\?' | tr '\n' ' '; }
+          echo "domains/: $(ls_ftp domains/)"
+          for d in $(curl -sS -k --ssl-reqd --list-only -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_HOST/domains/" 2>/dev/null | tr -d '\r' | grep -vx '\.\.\?'); do
+            echo "domains/$d/: $(ls_ftp "domains/$d/")"
+            echo "domains/$d/public_html/: $(ls_ftp "domains/$d/public_html/")"
+          done
+          echo "staging/: $(ls_ftp staging/)"
           target="ftp://$FTP_HOST/"
           if [ "$FTP_DIR" != "./" ]; then target="ftp://$FTP_HOST/$FTP_DIR"; fi
           names=$(curl -sS -k --ssl-reqd --list-only -u "$FTP_USERNAME:$FTP_PASSWORD" "$target" | tr -d '\r')

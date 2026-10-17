@@ -67,7 +67,7 @@ jobs:
             echo "$h -> $(getent ahostsv4 "$h" | awk 'NR==1{print $1}')"
           done
           echo "What the live site serves now:"
-          for u in / /addcall/ /about.html /call/ /cabinetbuilder/ /optionbuilder/ /pdf/ /app/; do
+          for u in / /addcall/ /addcall/add-call.apk /about.html /call/ /cabinetbuilder/ /optionbuilder/ /pdf/ /app/; do
             echo "  https://adddots.com$u -> $(curl -s -o /dev/null -w '%{http_code}' "https://adddots.com$u")"
           done
           echo "  home page mentions Applications: $(curl -s https://adddots.com/ | grep -c Applications)"

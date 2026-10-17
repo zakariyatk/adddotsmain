@@ -63,6 +63,9 @@ jobs:
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
+          for h in adddots.com ftp.adddots.com call.adddots.com; do
+            echo "$h -> $(getent ahostsv4 "$h" | awk 'NR==1{print $1}')"
+          done
           target="ftp://$FTP_HOST/"
           if [ "$FTP_DIR" != "./" ]; then target="ftp://$FTP_HOST/$FTP_DIR"; fi
           names=$(curl -sS -k --ssl-reqd --list-only -u "$FTP_USERNAME:$FTP_PASSWORD" "$target" | tr -d '\r')

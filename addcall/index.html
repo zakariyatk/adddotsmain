@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Call for Android — Add Dots</title>
+<link rel="icon" href="/favicon.ico?v=2" sizes="32x32">
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<meta name="description" content="Add Call: voice and video calls and chat with your people. Download the Android app (APK) from Add Dots.">
+<meta name="theme-color" content="#050505">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100%}
+body{font-family:Arial,Helvetica,sans-serif;background:#050505;color:#fff}
+.page{min-height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;background:radial-gradient(circle at 76% 44%,#1e1e1e 0%,#0e0e0e 26%,#050505 56%),#050505}
+.page:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.2) 1.4px,transparent 1.5px);background-size:26px 26px;mask-image:radial-gradient(ellipse 58% 72% at 76% 40%,#000,transparent 72%);-webkit-mask-image:radial-gradient(ellipse 58% 72% at 76% 40%,#000,transparent 72%)}
+
+header{position:relative;z-index:5;height:88px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6vw}
+.logo{width:48px;height:48px;border:1px solid #777;display:grid;place-items:center;font-size:11px;letter-spacing:2px;font-weight:700;text-decoration:none;color:#fff}
+.logo:hover{border-color:#fff}
+nav{display:flex;align-items:center;gap:34px}
+nav a{color:#aaa;text-decoration:none;text-transform:uppercase;letter-spacing:2px;font-size:10px}
+nav a:hover{color:#fff}
+.product-menu{position:relative;height:100%;display:flex;align-items:center}
+.menu-trigger{background:none;border:0;padding:12px 2px;font:inherit;font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:2px;cursor:pointer}
+.menu-trigger:hover,.menu-trigger[aria-expanded=true],.menu-trigger.current{color:#fff}
+.dropdown{position:absolute;top:calc(100% + 12px);right:-10px;width:245px;padding:8px;background:rgba(10,10,10,.97);border:1px solid #333;box-shadow:0 20px 50px #0008;opacity:0;visibility:hidden;transform:translateY(-6px);transition:.2s}
+.dropdown a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 12px;color:#999;font-size:9px;letter-spacing:1.5px}
+.dropdown a:hover,.dropdown a[aria-current]{color:#fff;background:#181818}
+.dropdown i{font-style:normal;font-size:7px;letter-spacing:1px;color:#666;border:1px solid #333;padding:3px 6px}
+.product-menu.open .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+@media(hover:hover) and (pointer:fine){
+.product-menu:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+}
+
+main{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:5vw;padding:1vh 6vw 9vh}
+.content{max-width:620px}
+.eyebrow{display:flex;align-items:center;gap:13px;color:#999;text-transform:uppercase;letter-spacing:4px;font-size:10px;margin-bottom:24px}
+.eyebrow:before{content:"";width:34px;height:1px;background:#fff}
+h1{font-size:clamp(46px,7vw,104px);line-height:.85;letter-spacing:-4px;font-weight:800;text-transform:uppercase}
+h1 span{display:block;color:transparent;-webkit-text-stroke:1px #aaa;font-size:.5em;letter-spacing:-1.5px;line-height:1.05;margin-top:.16em}
+.description{max-width:440px;color:#9a9a9a;font-size:14px;line-height:1.8;margin:26px 0 28px}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.primary,.secondary{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;min-height:50px;padding:0 24px;font-size:10px;text-transform:uppercase;letter-spacing:2px;font-weight:700}
+.primary{background:#fff;color:#050505}.primary:hover{background:#ddd}
+.secondary{border:1px solid #444;color:#fff}.secondary:hover{border-color:#fff}
+.primary svg{width:16px;height:16px}
+.note{margin-top:14px;font-size:10px;letter-spacing:1px;color:#666}
+
+/* app card, same language as the founder card on About */
+.card{position:relative;justify-self:end;width:100%;max-width:400px;border:1px solid #2a2a2a;background:linear-gradient(180deg,#0d0d0d,#060606);padding:34px 32px 30px;overflow:hidden}
+.card:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.45;background-image:radial-gradient(circle,rgba(255,255,255,.13) 1px,transparent 1.1px);background-size:15px 15px;mask-image:linear-gradient(215deg,#000,transparent 62%);-webkit-mask-image:linear-gradient(215deg,#000,transparent 62%)}
+.card>*{position:relative;z-index:2}
+.c-tag{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#777;margin-bottom:26px}
+.c-head{display:flex;align-items:center;gap:24px}
+.app-icon{position:relative;width:96px;height:96px;flex:none;display:grid;place-items:center;border:1px solid #3a3a3a;border-radius:50%;background:#111}
+.app-icon svg{width:38px;height:38px}
+.rim{position:absolute;inset:-15px;border:1px solid #303030;border-radius:50%;pointer-events:none;animation:spin 22s linear infinite}
+.rim:after{content:"";position:absolute;top:-5px;left:50%;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;background:#fff;box-shadow:0 0 14px #fff8}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.card h2{font-size:22px;line-height:1.18;text-transform:uppercase;letter-spacing:.5px;font-weight:800}
+.c-role{margin-top:9px;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#777}
+.c-list{margin-top:26px;border-top:1px solid #232323}
+.c-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:12px 0;border-bottom:1px solid #1a1a1a;font-size:10px;letter-spacing:1.6px;text-transform:uppercase}
+.c-row dt{color:#666;flex:none}
+.c-row dd{color:#e4e4e4;text-align:right}
+.steps{margin-top:22px;list-style:none;counter-reset:s;display:grid;gap:10px}
+.steps li{counter-increment:s;display:flex;gap:12px;font-size:12px;line-height:1.55;color:#9a9a9a}
+.steps li:before{content:counter(s);flex:none;width:20px;height:20px;border:1px solid #444;border-radius:50%;display:grid;place-items:center;font-size:9px;color:#fff}
+
+footer{position:absolute;z-index:5;left:6vw;right:6vw;bottom:24px;display:flex;justify-content:space-between;color:#555;text-transform:uppercase;letter-spacing:2px;font-size:8px}
+footer a{color:#777;text-decoration:none}
+footer a:hover{color:#fff}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+
+@media(max-width:860px){
+main{grid-template-columns:1fr;gap:34px;align-content:start;padding:8px 22px 30px}
+.card{justify-self:stretch;max-width:none}
+h1{font-size:clamp(40px,12vw,64px);letter-spacing:-2px}
+.description{font-size:13.5px;margin:20px 0 24px;max-width:none}
+footer{position:static;margin:10px 22px 18px}
+}
+@media(max-width:800px){
+header{height:72px;padding:0 20px}
+nav{gap:18px}
+.dropdown{position:fixed;top:66px;left:16px;right:16px;width:auto;transform:translateY(-6px)}
+.dropdown a{padding:15px 12px}
+.card{padding:26px 22px 22px}
+.app-icon{width:76px;height:76px}
+.rim{inset:-12px}
+.c-head{gap:20px}
+}
+@media(max-width:560px){
+header{padding:0 16px}
+nav{gap:14px}
+nav a,.menu-trigger{font-size:9px;letter-spacing:1.5px}
+.actions a{flex:1 1 100%}
+}
+@media(max-width:400px){
+.logo{width:40px;height:40px}
+nav{gap:10px}
+nav a,.menu-trigger{letter-spacing:1px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <a class="logo" href="/" aria-label="Add Dots home">AD</a>
+  <nav>
+    <a href="/about.html">About</a>
+    <div class="product-menu">
+      <button class="menu-trigger" type="button" aria-haspopup="true" aria-expanded="false">Products</button>
+      <div class="dropdown">
+        <a href="/optionbuilder/">Option Builder<i>V1.00</i></a>
+        <a href="/pdfreader/">PDF Reader + Editor <i>V1.01</i></a>
+        <a href="/timetracker/">Time Tracker <i>V1.00</i></a>
+        <a href="/reelcreator/">Reel Creator <i>Soon</i></a>
+        <a href="/cabinetbuilder/">Joinery Cabinet Creator <i>Soon</i></a>
+      </div>
+    </div>
+    <div class="product-menu">
+      <button class="menu-trigger current" type="button" aria-haspopup="true" aria-expanded="false">Applications</button>
+      <div class="dropdown">
+        <a href="/addcall/" aria-current="page">Add Call · Android <i>V1.1</i></a>
+      </div>
+    </div>
+    <div class="product-menu">
+      <button class="menu-trigger" type="button" aria-haspopup="true" aria-expanded="false">Solutions</button>
+      <div class="dropdown">
+        <a href="#">Coming soon <i>Soon</i></a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main>
+<section class="content">
+  <div class="eyebrow">Applications · Android</div>
+  <h1>Add Call<span>Voice, video and chat.</span></h1>
+  <p class="description">Call and message the people on your list with clear voice and video. Calls ring even when the app is closed, just like a phone call.</p>
+  <div class="actions">
+    <a class="primary" href="/addcall/add-call.apk" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      Download APK
+    </a>
+    <a class="secondary" href="https://call.adddots.com" target="_blank" rel="noopener">Use in browser</a>
+  </div>
+  <p class="note">Version 1.1 · Android 7.0 or newer · Free</p>
+</section>
+
+<aside class="card">
+  <div class="c-tag">Application</div>
+  <div class="c-head">
+    <div class="app-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg>
+      <span class="rim" aria-hidden="true"></span>
+    </div>
+    <div>
+      <h2>Add Call</h2>
+      <div class="c-role">Add Dots · Android</div>
+    </div>
+  </div>
+
+  <dl class="c-list">
+    <div class="c-row"><dt>Version</dt><dd>1.1</dd></div>
+    <div class="c-row"><dt>Needs</dt><dd>Android 7.0+</dd></div>
+    <div class="c-row"><dt>Price</dt><dd>Free</dd></div>
+  </dl>
+
+  <ol class="steps">
+    <li>Tap Download APK on your Android phone.</li>
+    <li>Open the file. If asked, allow your browser to install apps.</li>
+    <li>Sign in, choose your @username and add your people.</li>
+  </ol>
+</aside>
+</main>
+
+<footer><span><a href="/">Add Dots</a></span><span>© 2026</span></footer>
+</div>
+
+<script>
+/* Touch devices get no hover, so the Products, Applications and Solutions menus are opened by tapping. */
+(function(){
+  var menus=[].slice.call(document.querySelectorAll('.product-menu'));
+  function set(menu,open){
+    menu.classList.toggle('open',open);
+    menu.querySelector('.menu-trigger').setAttribute('aria-expanded',open?'true':'false');
+  }
+  menus.forEach(function(menu){
+    menu.querySelector('.menu-trigger').addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=!menu.classList.contains('open');
+      menus.forEach(function(m){set(m,false)});
+      set(menu,open);
+    });
+  });
+  document.addEventListener('click',function(e){
+    menus.forEach(function(m){if(!m.contains(e.target))set(m,false)});
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape')menus.forEach(function(m){set(m,false)});
+  });
+})();
+</script>
+</body>
+</html>

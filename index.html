@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Dots</title>
+<link rel="icon" href="/favicon.ico?v=2" sizes="32x32">
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<meta name="description" content="Add Dots — an independent studio in Doha, Qatar building focused web tools.">
+<meta name="theme-color" content="#050505">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden}
+body{font-family:Arial,Helvetica,sans-serif;background:#050505;color:#fff}
+.page{height:100vh;min-height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;background:radial-gradient(circle at 78% 48%,#222 0%,#101010 22%,#050505 52%),#050505}
+.page:before{content:"";position:absolute;inset:0;opacity:.12;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:80px 80px;mask-image:linear-gradient(to right,transparent,black 35%,black);-webkit-mask-image:linear-gradient(to right,transparent,black 35%,black)}
+header{position:relative;z-index:5;height:88px;display:flex;align-items:center;justify-content:space-between;padding:0 6vw}
+.logo{width:48px;height:48px;border:1px solid #777;display:grid;place-items:center;font-size:11px;letter-spacing:2px;font-weight:700}
+nav{display:flex;align-items:center;gap:34px}
+nav a{color:#aaa;text-decoration:none;text-transform:uppercase;letter-spacing:2px;font-size:10px}
+nav a:hover{color:#fff}
+.product-menu{position:relative;height:100%;display:flex;align-items:center}
+.menu-trigger{background:none;border:0;padding:12px 2px;font:inherit;font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:2px;cursor:pointer}
+.menu-trigger:hover,.menu-trigger[aria-expanded=true]{color:#fff}
+.dropdown{position:absolute;top:calc(100% + 12px);right:-10px;width:245px;padding:8px;background:rgba(10,10,10,.97);border:1px solid #333;box-shadow:0 20px 50px #0008;opacity:0;visibility:hidden;transform:translateY(-6px);transition:.2s}
+.dropdown a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 12px;color:#999;font-size:9px;letter-spacing:1.5px}
+.dropdown a:hover{color:#fff;background:#181818}
+.dropdown i{font-style:normal;font-size:7px;letter-spacing:1px;color:#666;border:1px solid #333;padding:3px 6px}
+/* opened by tap/click on every device; hover is a nicety for real pointers only */
+.product-menu.open .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+@media(hover:hover) and (pointer:fine){
+.product-menu:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+}
+main{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:4vw;padding:2vh 6vw 7vh}
+.content{max-width:690px}
+.eyebrow{display:flex;align-items:center;gap:13px;color:#999;text-transform:uppercase;letter-spacing:4px;font-size:10px;margin-bottom:27px}
+.eyebrow:before{content:"";width:34px;height:1px;background:#fff}
+h1{font-size:clamp(58px,8vw,124px);line-height:.82;letter-spacing:-6px;font-weight:800;text-transform:uppercase}
+h1 span{display:block;color:transparent;-webkit-text-stroke:1px #aaa}
+.description{max-width:440px;color:#8d8d8d;font-size:13px;line-height:1.8;margin:34px 0 30px}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.primary,.secondary{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;min-height:48px;padding:0 24px;font-size:10px;text-transform:uppercase;letter-spacing:2px;font-weight:700}
+.primary{background:#fff;color:#050505}.secondary{border:1px solid #444;color:#fff}
+.primary:hover{background:#ddd}.secondary:hover{border-color:#fff}
+.visual{height:min(65vh,610px);position:relative;display:flex;align-items:center;justify-content:center}
+
+/* Main rotating circle */
+.ring{width:min(34vw,440px);aspect-ratio:1;border:1px solid #555;border-radius:50%;position:absolute;animation:ringSpin 18s linear infinite}
+.ring:before,.ring:after{content:"";position:absolute;border:1px solid #333;border-radius:50%;inset:12%}
+.ring:after{inset:27%;border-color:#666}
+@keyframes ringSpin{from{transform:rotate(-18deg)}to{transform:rotate(342deg)}}
+
+/* Exactly two dots rotate together around the circle */
+.orbit-dots{width:min(34vw,440px);aspect-ratio:1;border-radius:50%;position:absolute;animation:orbitSpin 18s linear infinite}
+.orbit-dots:before,.orbit-dots:after{content:"";position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 0 24px #fff8}
+.orbit-dots:before{top:-7px;left:50%;transform:translateX(-50%)}
+.orbit-dots:after{bottom:-7px;left:50%;transform:translateX(-50%);background:#777;box-shadow:0 0 18px #fff4}
+@keyframes orbitSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+.square{width:min(22vw,285px);aspect-ratio:1;border:1px solid #aaa;transform:rotate(45deg);position:absolute}
+.square:after{content:"";position:absolute;inset:18%;border:1px solid #444}
+.visual-label{position:absolute;right:0;bottom:8%;writing-mode:vertical-rl;transform:rotate(180deg);color:#555;font-size:9px;letter-spacing:4px;text-transform:uppercase}
+footer{position:absolute;z-index:5;left:6vw;right:6vw;bottom:24px;display:flex;justify-content:space-between;color:#555;text-transform:uppercase;letter-spacing:2px;font-size:8px}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+
+@media(max-width:800px){
+header{height:72px;padding:0 20px}
+nav{gap:18px}
+/* pinned to the viewport so it can never run off the edge of a phone */
+.dropdown{position:fixed;top:66px;left:16px;right:16px;width:auto;transform:translateY(-6px)}
+.dropdown a{padding:15px 12px}
+main{grid-template-columns:1fr;padding:4vh 24px 70px;align-content:center}
+h1{font-size:clamp(58px,18vw,92px);letter-spacing:-4px}
+.description{font-size:12px;max-width:340px;margin:25px 0}
+.visual{position:absolute;inset:18% -20% 8% 30%;opacity:.35;height:auto}
+.ring,.orbit-dots{width:70vw}.square{width:43vw}
+footer{left:24px;right:24px;bottom:15px}
+}
+
+/* Narrow phones: shrink the nav so About, Products, Applications and Solutions all still fit */
+@media(max-width:560px){
+header{padding:0 16px}
+nav{gap:14px}
+nav a,.menu-trigger{font-size:9px;letter-spacing:1.5px}
+}
+@media(max-width:400px){
+.logo{width:40px;height:40px}
+nav{gap:10px}
+nav a,.menu-trigger{letter-spacing:1px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <div class="logo">AD</div>
+  <nav>
+    <a href="/about.html">About</a>
+    <div class="product-menu">
+      <button class="menu-trigger" type="button" aria-haspopup="true" aria-expanded="false">Products</button>
+      <div class="dropdown">
+        <a href="/optionbuilder/">Option Builder<i>V1.00</i></a>
+        <a href="/pdfreader/">PDF Reader + Editor <i>V1.01</i></a>
+        <a href="/timetracker/">Time Tracker <i>V1.00</i></a>
+        <a href="/reelcreator/">Reel Creator <i>Soon</i></a>
+        <a href="/cabinetbuilder/">Joinery Cabinet Creator <i>Soon</i></a>
+      </div>
+    </div>
+    <div class="product-menu">
+      <button class="menu-trigger" type="button" aria-haspopup="true" aria-expanded="false">Applications</button>
+      <div class="dropdown">
+        <a href="/addcall/">Add Call · Android <i>V1.1</i></a>
+      </div>
+    </div>
+    <div class="product-menu">
+      <button class="menu-trigger" type="button" aria-haspopup="true" aria-expanded="false">Solutions</button>
+      <div class="dropdown">
+        <a href="#">Coming soon <i>Soon</i></a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main>
+<section class="content">
+  <div class="eyebrow">Doha · Qatar</div>
+  <h1>Add<span>Dots.</span></h1>
+  <p class="description">A minimal digital presence built around clean lines, strong details and a distinctive visual identity.</p>
+  <div class="actions">
+    <a class="primary" href="tel:+97455036378">Contact Us</a>
+    <a class="secondary" href="https://wa.me/97455036378" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+</section>
+
+<section class="visual" aria-label="Animated Add Dots graphic">
+  <div class="ring"></div>
+  <div class="orbit-dots"></div>
+  <div class="square"></div>
+  <div class="visual-label">ADD · DEFINE · DETAIL</div>
+</section>
+</main>
+
+<footer><span>Add Dots</span><span>© 2026</span></footer>
+</div>
+
+<script>
+/* Touch devices get no hover, so the Products and Solutions menus are opened by tapping. */
+(function(){
+  var menus=[].slice.call(document.querySelectorAll('.product-menu'));
+  function set(menu,open){
+    menu.classList.toggle('open',open);
+    menu.querySelector('.menu-trigger').setAttribute('aria-expanded',open?'true':'false');
+  }
+  menus.forEach(function(menu){
+    menu.querySelector('.menu-trigger').addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=!menu.classList.contains('open');
+      menus.forEach(function(m){set(m,false)});
+      set(menu,open);
+    });
+  });
+  document.addEventListener('click',function(e){
+    menus.forEach(function(m){if(!m.contains(e.target))set(m,false)});
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape')menus.forEach(function(m){set(m,false)});
+  });
+})();
+</script>
+</body>
+</html>

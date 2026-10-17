@@ -71,6 +71,10 @@ jobs:
             echo "  https://adddots.com$u -> $(curl -s -o /dev/null -w '%{http_code}' "https://adddots.com$u")"
           done
           echo "  home page mentions Applications: $(curl -s https://adddots.com/ | grep -c Applications)"
+          echo "FTP login starts in: $(curl -sS -k -v --ssl-reqd -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_HOST/" -o /dev/null 2>&1 | tr -d '\r' | grep -m1 '^< 257' | cut -c3-)"
+          for d in domains/ domains/adddots.com/ domains/adddots.com/public_html/ ../; do
+            echo "  $d: $(curl -sS -k --ssl-reqd --list-only -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_HOST/$d" 2>&1 | tr -d '\r' | tr '\n' ' ' | cut -c1-300)"
+          done
           target="ftp://$FTP_HOST/"
           if [ "$FTP_DIR" != "./" ]; then target="ftp://$FTP_HOST/$FTP_DIR"; fi
           names=$(curl -sS -k --ssl-reqd --list-only -u "$FTP_USERNAME:$FTP_PASSWORD" "$target" | tr -d '\r')

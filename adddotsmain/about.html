@@ -26,14 +26,19 @@ nav a[aria-current]{color:#fff}
 .product-menu{position:relative;height:100%;display:flex;align-items:center}
 .menu-trigger{background:none;border:0;padding:12px 2px;font:inherit;font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:2px;cursor:pointer}
 .menu-trigger:hover,.menu-trigger[aria-expanded=true]{color:#fff}
-.dropdown{position:absolute;top:calc(100% + 12px);right:-10px;width:245px;padding:8px;background:rgba(10,10,10,.97);border:1px solid #333;box-shadow:0 20px 50px #0008;opacity:0;visibility:hidden;transform:translateY(-6px);transition:.2s}
-.dropdown a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 12px;color:#999;font-size:9px;letter-spacing:1.5px}
-.dropdown a:hover{color:#fff;background:#181818}
-.dropdown i{font-style:normal;font-size:7px;letter-spacing:1px;color:#666;border:1px solid #333;padding:3px 6px}
+.dropdown{position:absolute;z-index:10;top:calc(100% + 12px);right:-10px;width:245px;padding:8px;background:#0b0b0b;border:1px solid #444;box-shadow:0 20px 50px #000c;opacity:0;visibility:hidden;transform:translateY(-6px);transition:.2s}
+.dropdown:before{content:"";position:absolute;left:0;right:0;top:-14px;height:14px}
+.dropdown a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 12px;color:#ccc;font-size:9px;letter-spacing:1.5px;box-shadow:inset 2px 0 transparent}
+.dropdown a:hover,.dropdown a:focus-visible{color:#fff;background:#1d1d1d;box-shadow:inset 2px 0 #fff}
+.dropdown i{font-style:normal;font-size:7px;letter-spacing:1px;color:#aaa;border:1px solid #555;padding:3px 6px}
+/* outline only for keyboard focus, not after a mouse click */
+.menu-trigger:focus,.dropdown a:focus{outline:none}
+.menu-trigger:focus-visible{outline:1px solid #fff;outline-offset:4px}
 /* opened by tap/click on every device; hover is a nicety for real pointers only */
 .product-menu.open .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
 @media(hover:hover) and (pointer:fine){
 .product-menu:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+.product-menu:hover .menu-trigger{color:#fff}
 }
 
 main{position:relative;z-index:2;flex:1;min-height:0;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:5vw;padding:1vh 6vw 7vh}
@@ -252,6 +257,14 @@ footer{bottom:20px}
       set(menu,open);
     });
   });
+  if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    menus.forEach(function(menu){
+      menu.addEventListener('mouseenter',function(){
+        menus.forEach(function(m){if(m!==menu)set(m,false)});
+      });
+      menu.addEventListener('mouseleave',function(){set(menu,false)});
+    });
+  }
   document.addEventListener('click',function(e){
     menus.forEach(function(m){if(!m.contains(e.target))set(m,false)});
   });

@@ -121,6 +121,33 @@ jobs:
           echo "Now in adddotsmain/:"
           ftp --list-only "${base}adddotsmain/" | tr -d '\r' | sed 's/^/  /'
 
+      # One-time cleanup of two leftovers in public_html (Hostinger's default.php and
+      # a duplicate founder photo). Downloads each one first and keeps it as a run
+      # artifact for 30 days, then deletes it. Does nothing once they are gone.
+      - name: Back up and remove leftover files
+        env:
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          ftp() { curl -sS -k --ssl-reqd -u "$FTP_USERNAME:$FTP_PASSWORD" "$@"; }
+          base="ftp://$FTP_HOST/"
+          if [ "$FTP_DIR" != "./" ]; then base="ftp://$FTP_HOST/$FTP_DIR"; fi
+          names=$(ftp --list-only "$base" | tr -d '\r')
+          mkdir -p "$RUNNER_TEMP/leftovers-backup"
+          for f in default.php founder.jpg.jpeg; do
+            printf '%s\n' "$names" | grep -qx "$f" || continue
+            ftp -o "$RUNNER_TEMP/leftovers-backup/$f" "$base$f"
+            ftp --list-only -Q "DELE $f" "$base" > /dev/null
+            echo "Removed $f (backup kept as a run artifact)"
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: leftovers-backup
+          path: ${{ runner.temp }}/leftovers-backup/
+          if-no-files-found: ignore
+          retention-days: 30
+
       - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ env.FTP_HOST }}

@@ -1,11 +1,13 @@
 # adddots.com
 
-The Add Dots studio website: plain HTML, no build step. Every push to `main` uploads the site to Hostinger automatically ([.github/workflows/deploy.yml](.github/workflows/deploy.yml)). You can also upload the files by hand to the site's root folder (Hostinger → File Manager → public_html).
+The Add Dots studio website: plain HTML, no build step. Every push to `main` uploads the site to Hostinger automatically ([.github/workflows/deploy.yml](.github/workflows/deploy.yml)). You can also upload the files by hand (Hostinger → File Manager → public_html), keeping the same folders.
+
+Only the home page sits directly in public_html, next to the subdomain folders (call/, pdf/, opbuilder/). Everything else is in `adddotsmain/`:
 
 - `index.html`: home page
-- `about.html`: About, with the founder card
-- `addcall/index.html`: Add Call for Android, with the Download APK button
-- `addcall/add-call.apk`: the Android app. Not in this repository (ignored by .gitignore). Upload the newest signed APK here under this exact name, and the button picks it up.
+- `adddotsmain/about.html`: About, with the founder card
+- `adddotsmain/addcall/index.html`: Add Call for Android, with the Download APK button
+- `adddotsmain/addcall/add-call.apk`: the Android app. Not in this repository (ignored by .gitignore). Upload the newest signed APK here under this exact name, and the button picks it up.
 
 The Applications menu (after Products) lists Add Call. When there's a new app version, update the `V1.1` badge in the menus of all three pages and the version on the Add Call page.
 

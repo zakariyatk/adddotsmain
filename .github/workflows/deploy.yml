@@ -4,7 +4,7 @@ name: Deploy
 # run by hand from Actions → Deploy → Run workflow.
 # Needs repository secrets FTP_SERVER, FTP_USERNAME and FTP_PASSWORD (see README).
 # Only files this workflow uploaded are ever replaced or removed, so other folders
-# on the server (optionbuilder/, pdfreader/, the APK in addcall/) are left alone.
+# on the server (optionbuilder/, pdfreader/, the APK in adddotsmain/addcall/) are left alone.
 
 on:
   push:
@@ -94,6 +94,32 @@ jobs:
             echo "::error::This FTP login does not open in adddots.com's public_html (no call/ folder there). Use the u858015397.main account with server ftp.adddots.com (see README)."
             exit 1
           fi
+
+      # One-time move: everything but index.html now lives in adddotsmain/. Renames
+      # the files an earlier deploy put at the top level (addcall/ moves whole, so
+      # the APK in it goes along) and drops the old sync state so the upload below
+      # starts fresh instead of deleting anything. Does nothing once moved.
+      - name: Move the site into adddotsmain/
+        env:
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          ftp() { curl -sS -k --ssl-reqd -u "$FTP_USERNAME:$FTP_PASSWORD" "$@"; }
+          base="ftp://$FTP_HOST/"
+          if [ "$FTP_DIR" != "./" ]; then base="ftp://$FTP_HOST/$FTP_DIR"; fi
+          names=$(ftp --list-only "$base" | tr -d '\r')
+          if ! printf '%s\n' "$names" | grep -qx 'about.html'; then
+            echo "Already moved."
+            exit 0
+          fi
+          cmds=(-Q "*MKD adddotsmain")
+          for f in about.html addcall apple-touch-icon.png favicon.ico favicon.svg founder.jpg icon-192.png icon-512.png; do
+            printf '%s\n' "$names" | grep -qx "$f" && cmds+=(-Q "RNFR $f" -Q "RNTO adddotsmain/$f")
+          done
+          cmds+=(-Q "*DELE .ftp-deploy-sync-state.json")
+          ftp --list-only "${cmds[@]}" "$base" > /dev/null
+          echo "Now in adddotsmain/:"
+          ftp --list-only "${base}adddotsmain/" | tr -d '\r' | sed 's/^/  /'
 
       - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

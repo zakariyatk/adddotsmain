@@ -6,9 +6,9 @@ name: Deploy
 # Only files this workflow uploaded are ever replaced or removed, so other folders
 # on the server (optionbuilder/, pdfreader/, the APK in addcall/) are left alone.
 
-# Manual only for now: the FTP login opens a different folder from the live site
-# (see README). Put the push trigger back once the check below passes.
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:

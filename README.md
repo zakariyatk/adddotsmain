@@ -6,7 +6,7 @@ Only the home page sits directly in public_html, next to the subdomain folders (
 
 - `index.html`: home page
 - `adddotsmain/about.html`: About, with the founder card
-- `adddotsmain/optionbuilder/index.html`: Option Builder, the Products menu's page for it, with its screenshots in `adddotsmain/optionbuilder/img/`. Its Windows buttons are placeholders (`href="#"`) until the app is on the Microsoft Store
+- `adddotsmain/optionbuilder/index.html`: AddStock (formerly Option Builder), the Products menu's page for it, with its screenshots in `adddotsmain/optionbuilder/img/`. Its Windows buttons are placeholders (`href="#"`) until the app is on the Microsoft Store
 - `adddotsmain/pdf/index.html`: PDF Reader + Editor (Add Dots PDF), the Products menu's page for it, with its screenshots in `adddotsmain/pdf/img/`
 - `adddotsmain/addcall/index.html`: Add Call for Android, with the Download APK button
 - `adddotsmain/addcall/add-call.apk`: the Android app. Not in this repository (ignored by .gitignore). Upload the newest signed APK here under this exact name, and the button picks it up.

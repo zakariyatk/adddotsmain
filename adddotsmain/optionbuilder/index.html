@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option Builder — Add Dots</title>
+<link rel="icon" href="/adddotsmain/favicon.ico?v=2" sizes="32x32">
+<link rel="icon" href="/adddotsmain/favicon.svg?v=2" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/adddotsmain/apple-touch-icon.png?v=2">
+<meta name="description" content="Option Builder: build options strategies on live NSE data and see the payoff before you trade. For Windows, Android and the web.">
+<meta property="og:title" content="Option Builder">
+<meta property="og:description" content="See the payoff before you trade.">
+<meta property="og:image" content="https://adddots.com/adddotsmain/optionbuilder/img/banner.webp">
+<meta name="theme-color" content="#050505">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#050505;color:#fff;overflow-x:hidden}
+
+/* the site's header, as on the other pages */
+header{position:sticky;top:0;z-index:20;height:88px;display:flex;align-items:center;justify-content:space-between;padding:0 6vw;background:rgba(5,5,5,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #161616}
+.logo{width:48px;height:48px;border:1px solid #777;display:grid;place-items:center;font-size:11px;letter-spacing:2px;font-weight:700;text-decoration:none;color:#fff}
+.logo:hover{border-color:#fff}
+nav{display:flex;align-items:center;gap:34px}
+nav a{color:#aaa;text-decoration:none;text-transform:uppercase;letter-spacing:2px;font-size:10px}
+nav a:hover{color:#fff}
+.product-menu{position:relative;height:100%;display:flex;align-items:center}
+.menu-trigger{background:none;border:0;padding:12px 2px;font:inherit;font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:2px;cursor:pointer}
+.menu-trigger:hover,.menu-trigger[aria-expanded=true],.menu-trigger.current{color:#fff}
+.dropdown{position:absolute;z-index:10;top:calc(100% + 12px);right:-10px;width:245px;padding:8px;background:#0b0b0b;border:1px solid #444;box-shadow:0 20px 50px #000c;opacity:0;visibility:hidden;transform:translateY(-6px);transition:.2s}
+.dropdown:before{content:"";position:absolute;left:0;right:0;top:-14px;height:14px}
+.dropdown a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 12px;color:#ccc;font-size:9px;letter-spacing:1.5px;box-shadow:inset 2px 0 transparent}
+.dropdown a:hover,.dropdown a[aria-current],.dropdown a:focus-visible{color:#fff;background:#1d1d1d;box-shadow:inset 2px 0 #fff}
+.dropdown i{font-style:normal;font-size:7px;letter-spacing:1px;color:#aaa;border:1px solid #555;padding:3px 6px}
+.menu-trigger:focus,.dropdown a:focus{outline:none}
+.menu-trigger:focus-visible{outline:1px solid #fff;outline-offset:4px}
+.product-menu.open .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+@media(hover:hover) and (pointer:fine){
+.product-menu:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+.product-menu:hover .menu-trigger{color:#fff}
+}
+
+/* the product: one short line and a picture to each tile */
+main{display:grid;gap:12px;padding:12px 0;font-family:Inter,'Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+main a{text-decoration:none}
+main img{display:block;width:100%;height:auto}
+.tile{position:relative;overflow:hidden;text-align:center;display:flex;flex-direction:column}
+.dark{background:#07080B;color:#F5F5F7}
+.light{background:#FBFCFD;color:#1D1D1F}
+.copy{padding:52px 20px 26px}
+h1,h2{font-weight:600;letter-spacing:-.015em;line-height:1.07}
+h1{font-size:clamp(40px,6vw,56px)}
+h2{font-size:clamp(32px,4.6vw,48px)}
+.tile p{font-size:clamp(19px,2.2vw,24px);margin-top:6px}
+.dark p{color:#C7C7CC}
+.acts{display:flex;gap:14px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.btn{display:inline-block;font-size:17px;padding:11px 22px;border-radius:980px;border:1px solid #7B61FF}
+.btn.fill{background:#7B61FF;color:#fff}
+.btn.fill:hover{background:#8D77FF}
+.btn.line{color:#6A4FF0}
+.dark .btn.line{color:#B3A6FF;border-color:#B3A6FF}
+.btn.line:hover{background:rgba(123,97,255,.1)}
+.btn:focus-visible{outline:2px solid #A897FF;outline-offset:3px}
+.pic{margin-top:auto}
+.hero .copy{padding-top:64px}
+.wide .pic{max-width:1600px;margin:auto auto 0}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 12px}
+.pair .copy{padding-top:46px}
+.pair h2{font-size:clamp(30px,3.4vw,40px)}
+.pair p{font-size:clamp(17px,1.8vw,21px)}
+.phones{display:flex;gap:2vw;justify-content:center;padding:0 3vw}
+.phones img{width:min(30%,380px)}
+.tile p.note{font-size:12px;color:#6E6E73;max-width:520px;margin:28px auto 0;line-height:1.5}
+
+footer{display:flex;justify-content:space-between;padding:26px 6vw 30px;color:#555;text-transform:uppercase;letter-spacing:2px;font-size:8px}
+footer a{color:#777;text-decoration:none}
+footer a:hover{color:#fff}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media(max-width:800px){
+header{height:72px;padding:0 20px}
+nav{gap:18px}
+.dropdown{position:fixed;top:66px;left:16px;right:16px;width:auto;transform:translateY(-6px)}
+.dropdown a{padding:15px 12px}
+.pair{grid-template-columns:1fr;padding:0}
+.copy{padding-top:44px}
+.phones{overflow-x:auto;justify-content:flex-start;scroll-snap-type:x mandatory;padding:0 16px;gap:10px;scrollbar-width:none}
+.phones img{width:70%;flex:none;scroll-snap-align:center}
+footer{padding:22px 20px 26px}
+}
+@media(max-width:560px){
+header{padding:0 16px}
+nav{gap:14px}
+nav a,.menu-trigger{font-size:9px;letter-spacing:1.5px}
+}
+@media(max-width:400px){
+.logo{width:40px;height:40px}
+nav{gap:10px}
+nav a,.menu-trigger{letter-spacing:1px}
+}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="/" aria-label="Add Dots home">AD</a>
+  <nav>
+    <a href="/adddotsmain/about.html">About</a>
+    <div class="product-menu">
+      <button class="menu-trigger current" type="button" aria-haspopup="true" aria-expanded="false">Products</button>
+      <div class="dropdown">
+        <a href="/adddotsmain/optionbuilder/" aria-current="page">Option Builder <i>V1.00</i></a>
+        <a href="/adddotsmain/pdf/">PDF Reader + Editor <i>V1.01</i></a>
+        <a href="https://call.adddots.com/">Add Call <i>Web</i></a>
+      </div>
+    </div>
+    <div class="product-menu">
+      <button class="menu-trigger" type="button" aria-haspopup="true" aria-expanded="false">Applications</button>
+      <div class="dropdown">
+        <a href="/adddotsmain/addcall/">Add Call · Android <i>V1.1</i></a>
+      </div>
+    </div>
+    <div class="product-menu">
+      <button class="menu-trigger" type="button" aria-haspopup="true" aria-expanded="false">Solutions</button>
+      <div class="dropdown">
+        <a href="#">Coming soon <i>Soon</i></a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="tile dark hero wide">
+    <div class="copy">
+      <h1>Option Builder</h1>
+      <p>See the payoff before you trade.</p>
+      <div class="acts">
+        <a class="btn fill" href="https://optionbuilder.adddots.com/">Open Option Builder</a>
+        <!-- placeholder: the Microsoft Store link goes here once the app is listed -->
+        <a class="btn line" href="#">Get for Windows</a>
+        <a class="btn line" href="https://play.google.com/store/apps/details?id=com.adddots.optionbuilder">Get on Google Play</a>
+      </div>
+    </div>
+    <img class="pic" src="img/t-win-01.webp" alt="An iron condor and its payoff chart in the Strategy Builder" width="1600" height="653">
+  </section>
+
+  <section class="tile light wide">
+    <div class="copy"><h2>Track it live.</h2><p>Every strategy, leg by leg.</p></div>
+    <img class="pic" loading="lazy" src="img/t-win-02.webp" alt="A saved strategy with its live P&amp;L" width="1600" height="653">
+  </section>
+
+  <div class="pair">
+    <section class="tile dark">
+      <div class="copy"><h2>Option chain.</h2><p>At a glance.</p></div>
+      <img class="pic" loading="lazy" src="img/t-win-03.webp" alt="The option chain with OI, volume and IV" width="1600" height="653">
+    </section>
+    <section class="tile light">
+      <div class="copy"><h2>Open interest.</h2><p>By strike, by the minute.</p></div>
+      <img class="pic" loading="lazy" src="img/t-win-04.webp" alt="OI change by strike" width="1600" height="653">
+    </section>
+  </div>
+
+  <section class="tile dark wide">
+    <div class="copy"><h2>Charts.</h2><p>Indicators and drawings.</p></div>
+    <img class="pic" loading="lazy" src="img/t-win-05.webp" alt="A candlestick chart with a watchlist" width="1600" height="653">
+  </section>
+
+  <div class="pair">
+    <section class="tile light">
+      <div class="copy"><h2>Daily report.</h2><p>Ready to share.</p></div>
+      <img class="pic" loading="lazy" src="img/t-win-06.webp" alt="The daily market report and its Instagram post" width="1600" height="653">
+    </section>
+    <section class="tile dark">
+      <div class="copy"><h2>Portfolio.</h2><p>India and US.</p></div>
+      <img class="pic" loading="lazy" src="img/t-win-07.webp" alt="The portfolio with allocation and benchmarks" width="1600" height="653">
+    </section>
+  </div>
+
+  <section class="tile dark" id="android">
+    <div class="copy">
+      <h2>In your pocket.</h2>
+      <p>On your Android phone.</p>
+      <div class="acts">
+        <a class="btn fill" href="https://play.google.com/store/apps/details?id=com.adddots.optionbuilder">Get on Google Play</a>
+      </div>
+    </div>
+    <div class="phones pic">
+      <img src="img/t-phone-01.webp" alt="The Strategy Builder on a phone" width="1080" height="1320">
+      <img src="img/t-phone-03.webp" alt="A live draft on a phone" width="1080" height="1320">
+      <img src="img/t-phone-07.webp" alt="The daily report on a phone" width="1080" height="1320">
+    </div>
+  </section>
+
+  <section class="tile light" id="get">
+    <div class="copy" style="padding-bottom:56px">
+      <h2>Get Option Builder.</h2>
+      <p>Windows, Android and the web.</p>
+      <div class="acts">
+        <!-- placeholder: the Microsoft Store link goes here once the app is listed -->
+        <a class="btn fill" href="#">Windows</a>
+        <a class="btn fill" href="https://play.google.com/store/apps/details?id=com.adddots.optionbuilder">Android</a>
+        <a class="btn line" href="https://optionbuilder.adddots.com/">Web</a>
+      </div>
+      <p class="note">Option Builder is an analysis tool, not investment advice. Prices, margins and Greeks are estimates; verify with your broker before trading.</p>
+    </div>
+  </section>
+</main>
+
+<footer><span><a href="/">Add Dots</a></span><span>© 2026</span></footer>
+
+<script>
+/* Touch devices get no hover, so the Products, Applications and Solutions menus are opened by tapping. */
+(function(){
+  var menus=[].slice.call(document.querySelectorAll('.product-menu'));
+  function set(menu,open){
+    menu.classList.toggle('open',open);
+    menu.querySelector('.menu-trigger').setAttribute('aria-expanded',open?'true':'false');
+  }
+  menus.forEach(function(menu){
+    menu.querySelector('.menu-trigger').addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=!menu.classList.contains('open');
+      menus.forEach(function(m){set(m,false)});
+      set(menu,open);
+    });
+  });
+  if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    menus.forEach(function(menu){
+      menu.addEventListener('mouseenter',function(){
+        menus.forEach(function(m){if(m!==menu)set(m,false)});
+      });
+      menu.addEventListener('mouseleave',function(){set(menu,false)});
+    });
+  }
+  document.addEventListener('click',function(e){
+    menus.forEach(function(m){if(!m.contains(e.target))set(m,false)});
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape')menus.forEach(function(m){set(m,false)});
+  });
+})();
+</script>
+</body>
+</html>

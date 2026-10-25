@@ -3,20 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add Call for Android — Add Dots</title>
+<title>Add Call — Add Dots</title>
 <link rel="icon" href="/adddotsmain/favicon.ico?v=2" sizes="32x32">
 <link rel="icon" href="/adddotsmain/favicon.svg?v=2" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/adddotsmain/apple-touch-icon.png?v=2">
-<meta name="description" content="Add Call: voice and video calls and chat with your people. Download the Android app (APK) from Add Dots.">
+<meta name="description" content="Add Call: voice and video calls and chat with the people you add. No phone number needed. For Windows, Android and the web. Download the Android app (APK) from Add Dots.">
+<meta property="og:title" content="Add Call">
+<meta property="og:description" content="Calls, simply added.">
+<meta property="og:image" content="https://adddots.com/adddotsmain/addcall/img/banner.webp">
 <meta name="theme-color" content="#050505">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;min-height:100%}
-body{font-family:Arial,Helvetica,sans-serif;background:#050505;color:#fff}
-.page{min-height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;background:radial-gradient(circle at 76% 44%,#1e1e1e 0%,#0e0e0e 26%,#050505 56%),#050505}
-.page:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.2) 1.4px,transparent 1.5px);background-size:26px 26px;mask-image:radial-gradient(ellipse 58% 72% at 76% 40%,#000,transparent 72%);-webkit-mask-image:radial-gradient(ellipse 58% 72% at 76% 40%,#000,transparent 72%)}
+body{font-family:Arial,Helvetica,sans-serif;background:#050505;color:#fff;overflow-x:hidden}
 
-header{position:relative;z-index:5;height:88px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6vw}
+/* the site's header, as on the other pages */
+header{position:sticky;top:0;z-index:20;height:88px;display:flex;align-items:center;justify-content:space-between;padding:0 6vw;background:rgba(5,5,5,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #161616}
 .logo{width:48px;height:48px;border:1px solid #777;display:grid;place-items:center;font-size:11px;letter-spacing:2px;font-weight:700;text-decoration:none;color:#fff}
 .logo:hover{border-color:#fff}
 nav{display:flex;align-items:center;gap:34px}
@@ -30,7 +34,6 @@ nav a:hover{color:#fff}
 .dropdown a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 12px;color:#ccc;font-size:9px;letter-spacing:1.5px;box-shadow:inset 2px 0 transparent}
 .dropdown a:hover,.dropdown a[aria-current],.dropdown a:focus-visible{color:#fff;background:#1d1d1d;box-shadow:inset 2px 0 #fff}
 .dropdown i{font-style:normal;font-size:7px;letter-spacing:1px;color:#aaa;border:1px solid #555;padding:3px 6px}
-/* outline only for keyboard focus, not after a mouse click */
 .menu-trigger:focus,.dropdown a:focus{outline:none}
 .menu-trigger:focus-visible{outline:1px solid #fff;outline-offset:4px}
 .product-menu.open .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
@@ -39,69 +42,58 @@ nav a:hover{color:#fff}
 .product-menu:hover .menu-trigger{color:#fff}
 }
 
-main{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:5vw;padding:1vh 6vw 9vh}
-.content{max-width:620px}
-.eyebrow{display:flex;align-items:center;gap:13px;color:#999;text-transform:uppercase;letter-spacing:4px;font-size:10px;margin-bottom:24px}
-.eyebrow:before{content:"";width:34px;height:1px;background:#fff}
-h1{font-size:clamp(46px,7vw,104px);line-height:.85;letter-spacing:-4px;font-weight:800;text-transform:uppercase}
-h1 span{display:block;color:transparent;-webkit-text-stroke:1px #aaa;font-size:.5em;letter-spacing:-1.5px;line-height:1.05;margin-top:.16em}
-.description{max-width:440px;color:#9a9a9a;font-size:14px;line-height:1.8;margin:26px 0 28px}
-.actions{display:flex;gap:12px;flex-wrap:wrap}
-.primary,.secondary{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;min-height:50px;padding:0 24px;font-size:10px;text-transform:uppercase;letter-spacing:2px;font-weight:700}
-.primary{background:#fff;color:#050505}.primary:hover{background:#ddd}
-.secondary{border:1px solid #444;color:#fff}.secondary:hover{border-color:#fff}
-.primary svg{width:16px;height:16px}
-.note{margin-top:14px;font-size:10px;letter-spacing:1px;color:#666}
+/* the product: one short line and a picture to each tile */
+main{display:grid;gap:12px;padding:12px 0;font-family:Inter,'Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+main a{text-decoration:none}
+main img{display:block;width:100%;height:auto}
+.tile{position:relative;overflow:hidden;text-align:center;display:flex;flex-direction:column}
+.dark{background:#07080B;color:#F5F5F7}
+.light{background:#FBFCFD;color:#1D1D1F}
+.copy{padding:52px 20px 26px}
+h1,h2{font-weight:600;letter-spacing:-.015em;line-height:1.07}
+h1{font-size:clamp(40px,6vw,56px)}
+h2{font-size:clamp(32px,4.6vw,48px)}
+.tile p{font-size:clamp(19px,2.2vw,24px);margin-top:6px}
+.dark p{color:#C7C7CC}
+.acts{display:flex;gap:14px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.btn{display:inline-block;font-size:17px;padding:11px 22px;border-radius:980px;border:1px solid #5B3DF5}
+.btn.fill{background:#5B3DF5;color:#fff}
+.btn.fill:hover{background:#6E54F7}
+.btn.line{color:#5B3DF5}
+.dark .btn.line{color:#A99BFF;border-color:#A99BFF}
+.btn.line:hover{background:rgba(91,61,245,.1)}
+.btn:focus-visible{outline:2px solid #A897FF;outline-offset:3px}
+.pic{margin-top:auto}
+.hero .copy{padding-top:64px}
+.wide .pic{max-width:1600px;margin:auto auto 0}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 12px}
+.pair .copy{padding-top:46px}
+.pair h2{font-size:clamp(30px,3.4vw,40px)}
+.pair p{font-size:clamp(17px,1.8vw,21px)}
+.phones{display:flex;gap:2vw;justify-content:center;padding:0 3vw}
+.phones img{width:min(30%,380px)}
+.tile p.note{font-size:12px;color:#6E6E73;max-width:520px;margin:28px auto 0;line-height:1.5}
 
-/* app card, same language as the founder card on About */
-.card{position:relative;justify-self:end;width:100%;max-width:400px;border:1px solid #2a2a2a;background:linear-gradient(180deg,#0d0d0d,#060606);padding:34px 32px 30px;overflow:hidden}
-.card:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.45;background-image:radial-gradient(circle,rgba(255,255,255,.13) 1px,transparent 1.1px);background-size:15px 15px;mask-image:linear-gradient(215deg,#000,transparent 62%);-webkit-mask-image:linear-gradient(215deg,#000,transparent 62%)}
-.card>*{position:relative;z-index:2}
-.c-tag{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#777;margin-bottom:26px}
-.c-head{display:flex;align-items:center;gap:24px}
-.app-icon{position:relative;width:96px;height:96px;flex:none;display:grid;place-items:center;border:1px solid #3a3a3a;border-radius:50%;background:#111}
-.app-icon svg{width:38px;height:38px}
-.rim{position:absolute;inset:-15px;border:1px solid #303030;border-radius:50%;pointer-events:none;animation:spin 22s linear infinite}
-.rim:after{content:"";position:absolute;top:-5px;left:50%;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;background:#fff;box-shadow:0 0 14px #fff8}
-@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-.card h2{font-size:22px;line-height:1.18;text-transform:uppercase;letter-spacing:.5px;font-weight:800}
-.c-role{margin-top:9px;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#777}
-.c-list{margin-top:26px;border-top:1px solid #232323}
-.c-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:12px 0;border-bottom:1px solid #1a1a1a;font-size:10px;letter-spacing:1.6px;text-transform:uppercase}
-.c-row dt{color:#666;flex:none}
-.c-row dd{color:#e4e4e4;text-align:right}
-.steps{margin-top:22px;list-style:none;counter-reset:s;display:grid;gap:10px}
-.steps li{counter-increment:s;display:flex;gap:12px;font-size:12px;line-height:1.55;color:#9a9a9a}
-.steps li:before{content:counter(s);flex:none;width:20px;height:20px;border:1px solid #444;border-radius:50%;display:grid;place-items:center;font-size:9px;color:#fff}
-
-footer{position:absolute;z-index:5;left:6vw;right:6vw;bottom:24px;display:flex;justify-content:space-between;color:#555;text-transform:uppercase;letter-spacing:2px;font-size:8px}
+footer{display:flex;justify-content:space-between;padding:26px 6vw 30px;color:#555;text-transform:uppercase;letter-spacing:2px;font-size:8px}
 footer a{color:#777;text-decoration:none}
 footer a:hover{color:#fff}
 
-@media(prefers-reduced-motion:reduce){*{animation:none!important}}
-
-@media(max-width:860px){
-main{grid-template-columns:1fr;gap:34px;align-content:start;padding:8px 22px 30px}
-.card{justify-self:stretch;max-width:none}
-h1{font-size:clamp(40px,12vw,64px);letter-spacing:-2px}
-.description{font-size:13.5px;margin:20px 0 24px;max-width:none}
-footer{position:static;margin:10px 22px 18px}
-}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 @media(max-width:800px){
 header{height:72px;padding:0 20px}
 nav{gap:18px}
 .dropdown{position:fixed;top:66px;left:16px;right:16px;width:auto;transform:translateY(-6px)}
 .dropdown a{padding:15px 12px}
-.card{padding:26px 22px 22px}
-.app-icon{width:76px;height:76px}
-.rim{inset:-12px}
-.c-head{gap:20px}
+.pair{grid-template-columns:1fr;padding:0}
+.copy{padding-top:44px}
+.phones{overflow-x:auto;justify-content:flex-start;scroll-snap-type:x mandatory;padding:0 16px;gap:10px;scrollbar-width:none}
+.phones img{width:70%;flex:none;scroll-snap-align:center}
+footer{padding:22px 20px 26px}
 }
 @media(max-width:560px){
 header{padding:0 16px}
 nav{gap:14px}
 nav a,.menu-trigger{font-size:9px;letter-spacing:1.5px}
-.actions a{flex:1 1 100%}
 }
 @media(max-width:400px){
 .logo{width:40px;height:40px}
@@ -111,21 +103,20 @@ nav a,.menu-trigger{letter-spacing:1px}
 </style>
 </head>
 <body>
-<div class="page">
 <header>
   <a class="logo" href="/" aria-label="Add Dots home">AD</a>
   <nav>
     <a href="/adddotsmain/about.html">About</a>
     <div class="product-menu">
-      <button class="menu-trigger" type="button" aria-haspopup="true" aria-expanded="false">Products</button>
+      <button class="menu-trigger current" type="button" aria-haspopup="true" aria-expanded="false">Products</button>
       <div class="dropdown">
         <a href="/adddotsmain/optionbuilder/">AddStock <i>V1.00</i></a>
         <a href="/adddotsmain/pdf/">PDF Reader + Editor <i>V1.01</i></a>
-        <a href="https://call.adddots.com/">Add Call <i>Web</i></a>
+        <a href="/adddotsmain/addcall/" aria-current="page">Add Call <i>Web</i></a>
       </div>
     </div>
     <div class="product-menu">
-      <button class="menu-trigger current" type="button" aria-haspopup="true" aria-expanded="false">Applications</button>
+      <button class="menu-trigger" type="button" aria-haspopup="true" aria-expanded="false">Applications</button>
       <div class="dropdown">
         <a href="/adddotsmain/addcall/" aria-current="page">Add Call · Android <i>V1.1</i></a>
       </div>
@@ -140,49 +131,84 @@ nav a,.menu-trigger{letter-spacing:1px}
 </header>
 
 <main>
-<section class="content">
-  <div class="eyebrow">Applications · Android</div>
-  <h1>Add Call<span>Voice, video and chat.</span></h1>
-  <p class="description">Call and message the people on your list with clear voice and video. Calls ring even when the app is closed, just like a phone call.</p>
-  <div class="actions">
-    <a class="primary" href="/adddotsmain/addcall/add-call.apk" download>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-      Download APK
-    </a>
-    <a class="secondary" href="https://call.adddots.com" target="_blank" rel="noopener">Use in browser</a>
-  </div>
-  <p class="note">Version 1.1 · Android 7.0 or newer · Free</p>
-</section>
-
-<aside class="card">
-  <div class="c-tag">Application</div>
-  <div class="c-head">
-    <div class="app-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg>
-      <span class="rim" aria-hidden="true"></span>
+  <section class="tile dark hero wide">
+    <div class="copy">
+      <h1>Add Call</h1>
+      <p>Calls, simply added.</p>
+      <div class="acts">
+        <a class="btn fill" href="https://call.adddots.com/">Open Add Call</a>
+        <!-- placeholder: the Microsoft Store link goes here once the app is listed -->
+        <a class="btn line" href="#">Get for Windows</a>
+        <a class="btn line" href="https://play.google.com/store/apps/details?id=com.adddots.call">Get on Google Play</a>
+      </div>
     </div>
-    <div>
-      <h2>Add Call</h2>
-      <div class="c-role">Add Dots · Android</div>
-    </div>
+    <img class="pic" src="img/t-win-01.webp" alt="A chat with photos, a sticker and a voice note" width="1600" height="653">
+  </section>
+
+  <section class="tile light wide">
+    <div class="copy"><h2>Rings like a phone call.</h2><p>Even when the app is closed.</p></div>
+    <img class="pic" loading="lazy" src="img/t-win-02.webp" alt="An incoming video call with Accept and Decline" width="1600" height="653">
+  </section>
+
+  <div class="pair">
+    <section class="tile dark">
+      <div class="copy"><h2>Stickers.</h2><p>Photos and voice notes too.</p></div>
+      <img class="pic" loading="lazy" src="img/t-win-03.webp" alt="The sticker panel in a chat" width="1600" height="653">
+    </section>
+    <section class="tile light">
+      <div class="copy"><h2>Who’s online.</h2><p>Add people by @username.</p></div>
+      <img class="pic" loading="lazy" src="img/t-win-04.webp" alt="People, with who is online" width="1600" height="653">
+    </section>
   </div>
 
-  <dl class="c-list">
-    <div class="c-row"><dt>Version</dt><dd>1.1</dd></div>
-    <div class="c-row"><dt>Needs</dt><dd>Android 7.0+</dd></div>
-    <div class="c-row"><dt>Price</dt><dd>Free</dd></div>
-  </dl>
+  <section class="tile dark wide">
+    <div class="copy"><h2>Call back.</h2><p>Every call, one tap away.</p></div>
+    <img class="pic" loading="lazy" src="img/t-win-05.webp" alt="The call history" width="1600" height="653">
+  </section>
 
-  <ol class="steps">
-    <li>Tap Download APK on your Android phone.</li>
-    <li>Open the file. If asked, allow your browser to install apps.</li>
-    <li>Sign in, choose your @username and add your people.</li>
-  </ol>
-</aside>
+  <div class="pair">
+    <section class="tile light">
+      <div class="copy"><h2>Dark mode.</h2><p>Day or night.</p></div>
+      <img class="pic" loading="lazy" src="img/t-win-06.webp" alt="A chat in dark mode" width="1600" height="653">
+    </section>
+    <section class="tile dark">
+      <div class="copy"><h2>Your control.</h2><p>Block, report or delete.</p></div>
+      <img class="pic" loading="lazy" src="img/t-win-07.webp" alt="Settings" width="1600" height="653">
+    </section>
+  </div>
+
+  <section class="tile dark" id="android">
+    <div class="copy">
+      <h2>In your pocket.</h2>
+      <p>On your Android phone.</p>
+      <div class="acts">
+        <a class="btn fill" href="https://play.google.com/store/apps/details?id=com.adddots.call">Get on Google Play</a>
+        <a class="btn line" href="/adddotsmain/addcall/add-call.apk" download>Download APK</a>
+      </div>
+      <p class="note">Version 1.1 · Android 7.0 or newer · Free</p>
+    </div>
+    <div class="phones pic">
+      <img src="img/t-phone-01.webp" alt="An incoming call on a phone" width="1080" height="1320">
+      <img src="img/t-phone-03.webp" alt="Stickers in a chat on a phone" width="1080" height="1320">
+      <img src="img/t-phone-05.webp" alt="The call history on a phone" width="1080" height="1320">
+    </div>
+  </section>
+
+  <section class="tile light" id="get">
+    <div class="copy" style="padding-bottom:64px">
+      <h2>Get Add Call.</h2>
+      <p>Windows, Android and the web.</p>
+      <div class="acts">
+        <!-- placeholder: the Microsoft Store link goes here once the app is listed -->
+        <a class="btn fill" href="#">Windows</a>
+        <a class="btn fill" href="https://play.google.com/store/apps/details?id=com.adddots.call">Android</a>
+        <a class="btn line" href="https://call.adddots.com/">Web</a>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer><span><a href="/">Add Dots</a></span><span>© 2026</span></footer>
-</div>
 
 <script>
 /* Touch devices get no hover, so the Products, Applications and Solutions menus are opened by tapping. */

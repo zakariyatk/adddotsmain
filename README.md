@@ -8,10 +8,10 @@ Only the home page sits directly in public_html, next to the subdomain folders (
 - `adddotsmain/about.html`: About, with the founder card
 - `adddotsmain/optionbuilder/index.html`: AddStock (formerly Option Builder), the Products menu's page for it, with its screenshots in `adddotsmain/optionbuilder/img/`. Its Windows buttons are placeholders (`href="#"`) until the app is on the Microsoft Store
 - `adddotsmain/pdf/index.html`: PDF Reader + Editor (Add Dots PDF), the Products menu's page for it, with its screenshots in `adddotsmain/pdf/img/`
-- `adddotsmain/addcall/index.html`: Add Call for Android, with the Download APK button
+- `adddotsmain/addcall/index.html`: Add Call, the page both Products → Add Call and Applications → Add Call · Android open: short headlines over its screenshots (in `adddotsmain/addcall/img/`), with Google Play, the Download APK button, the web app and placeholder Windows buttons (`href="#"`) until it is on the Microsoft Store
 - `adddotsmain/addcall/add-call.apk`: the Android app. Not in this repository (ignored by .gitignore). Upload the newest signed APK here under this exact name, and the button picks it up.
 
-The Applications menu (after Products) lists Add Call. When there's a new app version, update the `V1.1` badge in the menus of all three pages and the version on the Add Call page.
+The Applications menu (after Products) lists Add Call. When there's a new app version, update the `V1.1` badge in the menus of every page and the "Version 1.1" line on the Add Call page.
 
 ## Automatic upload: one-time setup
 

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gold Desk Live</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#13120F; --surface:#1C1B17; --fg:#EDE8DC; --muted:#A39D8D; --line:#34312A;
+  --gold:#DDB45A; --gold-soft:#3A3020; --up:#4CC285; --down:#F0786A; --alert:#5AA9F0;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--f-body)}
+.wrap{max-width:900px;margin:0 auto;padding:24px 16px 48px;display:flex;flex-direction:column;gap:24px}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-weight:800;font-size:26px;text-transform:uppercase;letter-spacing:.02em}
+.brand span{color:var(--gold)}
+.fresh{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.fresh.live .dot{background:var(--up);animation:pulse 1.6s infinite}
+.fresh.err .dot{background:var(--down)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(76,194,133,.5)}100%{box-shadow:0 0 0 8px rgba(76,194,133,0)}}
+@media (prefers-reduced-motion:reduce){.fresh.live .dot{animation:none}}
+
+
+.spot{display:grid;gap:8px;border-bottom:1px solid var(--line);padding-bottom:20px}
+.price{font-family:var(--f-display);font-weight:800;font-size:clamp(56px,14vw,104px);line-height:.9;transition:color .4s}
+.price.up{color:var(--up)} .price.down{color:var(--down)}
+.price small{font-size:.32em;color:var(--muted);margin-left:6px}
+.sub{font-size:14px;color:var(--muted)}
+
+.karats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.k{background:var(--surface);padding:16px 14px;display:grid;gap:4px}
+.k b{font-family:var(--f-display);font-size:22px;color:var(--gold)}
+.k .v{font-size:20px;font-weight:500}
+.k .s{font-size:12px;color:var(--muted)}
+@media (max-width:560px){.karats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+section{display:grid;gap:12px}
+.panel{border:1px solid var(--line);border-radius:6px;background:var(--surface);overflow:hidden}
+.chart{height:460px}
+.hint{font-size:13px;color:var(--muted)}
+
+.addrow{display:flex;gap:10px;flex-wrap:wrap}
+.addrow input{flex:1 1 160px;min-width:0;font:500 17px var(--f-mono);padding:10px 12px;border:1px solid var(--line);border-radius:5px;background:var(--surface);color:var(--fg)}
+.btn{font:600 14px var(--f-body);padding:10px 16px;border-radius:5px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.btn.primary{background:var(--gold);color:#1B1A16;border-color:var(--gold)}
+.btn:focus-visible,.addrow input:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.alerts{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.al{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;background:var(--surface)}
+.al .lvl{font-size:18px}
+.pill{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.pill.armed{color:var(--alert);border-color:var(--alert)}
+.pill.hit{color:var(--up);border-color:var(--up)}
+.al button{background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px;line-height:1}
+.al button:hover{color:var(--down)}
+.empty{padding:16px;color:var(--muted);font-size:14px;background:var(--surface)}
+.notif{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.calc label{display:grid;gap:6px;font-size:13px;color:var(--muted)}
+.calc input,.calc select{font:500 17px var(--f-mono);padding:10px 12px;border:1px solid var(--line);border-radius:5px;background:var(--surface);color:var(--fg);width:100%}
+.total{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;padding:16px;background:var(--gold-soft);border-radius:6px}
+.total .num{font-size:26px}
+footer{font-size:12px;color:var(--muted);max-width:65ch;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">Gold <span>Desk</span> Live</div>
+    <div class="fresh" id="fresh"><span class="dot"></span><span id="freshTxt">Connecting…</span></div>
+  </header>
+
+  <div class="spot">
+    <div class="label">XAU / USD · spot per troy ounce · refreshes every 10 s</div>
+    <div class="price num" id="spot">—</div>
+    <div class="sub num" id="sess">Session change appears after the next update</div>
+  </div>
+
+  <section>
+    <div class="label">Price alerts</div>
+    <div class="hint">Type a price level and press Add alert. You'll be notified when gold touches it.</div>
+    <div class="addrow">
+      <input id="lvl" type="number" inputmode="decimal" step="0.1" placeholder="Alert level, e.g. 4100">
+      <button class="btn primary" id="add" type="button">Add alert</button>
+    </div>
+    <div class="alerts" id="alerts"></div>
+    <div class="notif"><span id="notifTxt">Desktop notifications are off. Turn them on to get alerts while this tab is minimized.</span><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="notifBtn" type="button">Turn on notifications</button><button class="btn" id="testBtn" type="button">Send test alert</button></span></div>
+  </section>
+
+  <section>
+    <div class="label">Qatar rate · QAR per gram</div>
+    <div class="karats" id="karats"></div>
+  </section>
+
+  <section>
+    <div class="label">Live chart · XAU/USD, 5-minute candles</div>
+    <div class="panel chart">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+        {"autosize":true,"symbol":"OANDA:XAUUSD","interval":"5","timezone":"Asia/Qatar","theme":"dark","style":"1","locale":"en","allow_symbol_change":false,"hide_side_toolbar":true,"save_image":false,"support_host":"https://www.tradingview.com"}
+        </script>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="label">Value calculator</div>
+    <div class="calc">
+      <label for="grams">Weight (grams)<input id="grams" type="number" inputmode="decimal" min="0" step="0.01" value="10"></label>
+      <label for="kt">Purity<select id="kt"><option value="24">24K</option><option value="22" selected>22K</option><option value="21">21K</option><option value="18">18K</option></select></label>
+      <div class="total"><span class="label">Raw gold value</span><span><span class="num" id="tQar">—</span> <span class="num" id="tUsd" style="color:var(--muted);font-size:14px"></span></span></div>
+    </div>
+  </section>
+
+  <footer>Spot price from gold-api.com; candle chart by TradingView. Alerts are checked every 10 seconds while this page is open, including when the tab is minimized. QAR rates use the fixed peg of 3.64 QAR per USD and pure-gold ratios (22K = 22/24). These are raw metal rates; jewellers add making charges and their own margin.</footer>
+</div>
+
+<script>
+(function(){
+  const OZ=31.1035, QAR=3.64, KTS=[24,22,21,18], EVERY=10000;
+  const $=id=>document.getElementById(id);
+  const f2=n=>n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+  let spot=null, first=null, prev=null, lastOk=0;
+
+  /* ---------- storage ---------- */
+  const load=()=>{try{return JSON.parse(localStorage.getItem("gd-alerts")||"[]")}catch(e){return []}};
+  const save=()=>{try{localStorage.setItem("gd-alerts",JSON.stringify(alerts))}catch(e){}};
+  let alerts=load();
+
+  /* ---------- alerts ---------- */
+  function addAlert(level){
+    if(!isFinite(level)||level<=0) return;
+    if(spot==null){$("notifTxt").textContent="Wait for the first price, then add your alert.";return}
+    if(alerts.some(a=>!a.hit&&Math.abs(a.level-level)<0.05)) return;
+    const a={id:Date.now()+""+Math.random().toString(16).slice(2,6),level,dir:level>=spot?"up":"down",hit:false};
+    alerts.push(a); save(); renderAlerts();
+    unlockAudio();
+  }
+  function removeAlert(id){
+    alerts=alerts.filter(x=>x.id!==id); save(); renderAlerts();
+  }
+  function renderAlerts(){
+    const box=$("alerts");
+    if(!alerts.length){box.innerHTML='<div class="empty">No alerts yet.</div>';return}
+    box.innerHTML=alerts.slice().sort((a,b)=>b.level-a.level).map(a=>`<div class="al">
+      <span><span class="lvl num">$${f2(a.level)}</span> <span class="hint">${a.dir==="up"?"when price rises to":"when price falls to"}</span></span>
+      <span style="display:flex;gap:10px;align-items:center"><span class="pill ${a.hit?"hit":"armed"}">${a.hit?"Triggered":"Waiting"}</span>
+      <button type="button" aria-label="Delete alert at ${a.level}" data-id="${a.id}">×</button></span></div>`).join("");
+  }
+  $("alerts").addEventListener("click",e=>{const b=e.target.closest("button[data-id]"); if(b) removeAlert(b.dataset.id)});
+  $("add").addEventListener("click",()=>{addAlert(parseFloat($("lvl").value)); $("lvl").value=""});
+  $("lvl").addEventListener("keydown",e=>{if(e.key==="Enter") $("add").click()});
+
+  function checkAlerts(){
+    for(const a of alerts){
+      if(a.hit) continue;
+      if((a.dir==="up"&&spot>=a.level)||(a.dir==="down"&&spot<=a.level)){
+        a.hit=true; fire(a);
+      }
+    }
+    save(); renderAlerts();
+  }
+
+  /* ---------- notify: desktop, sound, banner, tab title ---------- */
+  let audioCtx=null;
+  function unlockAudio(){try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==="suspended") audioCtx.resume()}catch(e){}}
+  document.addEventListener("click",unlockAudio,{once:true});
+  function beep(){
+    if(!audioCtx) return;
+    [0,0.25,0.5].forEach(t=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+      o.frequency.value=880;o.connect(g);g.connect(audioCtx.destination);
+      g.gain.setValueAtTime(.0001,audioCtx.currentTime+t);g.gain.exponentialRampToValueAtTime(.3,audioCtx.currentTime+t+.02);
+      g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+t+.2);o.start(audioCtx.currentTime+t);o.stop(audioCtx.currentTime+t+.22)});
+  }
+  let flash=null; const baseTitle=document.title;
+  function stopFlash(){if(flash){clearInterval(flash);flash=null;document.title=baseTitle}}
+  window.addEventListener("focus",stopFlash);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden) stopFlash()});
+  function notify(title,body){
+    try{ if("Notification" in window && Notification.permission==="granted"){
+      const n=new Notification(title,{body,requireInteraction:true,tag:"gold-"+Date.now()});
+      n.onclick=()=>{window.focus();n.close()};
+    }}catch(e){}
+  }
+  function fire(a){
+    const msg=`Gold ${a.dir==="up"?"rose to":"fell to"} $${f2(spot)} — your alert at $${f2(a.level)} was hit`;
+    beep(); notify("Gold alert · $"+f2(a.level),msg);
+    if(document.hidden&&!flash){let on=false;flash=setInterval(()=>{document.title=(on=!on)?"🔔 GOLD ALERT":baseTitle},900)}
+  }
+  function notifState(){
+    if(!("Notification" in window)){$("notifTxt").textContent="This browser doesn't support desktop notifications. You'll get a sound only.";$("notifBtn").hidden=true;return}
+    const p=Notification.permission;
+    if(p==="granted"){$("notifTxt").textContent="Desktop notifications are on. Alerts reach you even when this tab is minimized.";$("notifBtn").hidden=true}
+    else if(p==="denied"){$("notifTxt").textContent=location.protocol==="file:"?"Chrome blocks notifications for pages opened as a file. Put this page on a website (https) to get them. The sound still works.":"Notifications are blocked. Click the lock icon in the address bar and allow Notifications.";$("notifBtn").hidden=true}
+  }
+  $("notifBtn").addEventListener("click",async()=>{unlockAudio();try{await Notification.requestPermission()}catch(e){} notifState()});
+  $("testBtn").addEventListener("click",()=>{unlockAudio();beep();
+    if("Notification" in window&&Notification.permission==="granted") notify("Gold alert · test","This is how your price alerts will look.");
+    else $("notifTxt").textContent="Test sound played. Turn on notifications to see the pop-up too.";});
+  notifState();
+
+  /* ---------- price ---------- */
+  const perGram=kt=>spot/OZ*(kt/24)*QAR;
+  function render(){
+    const el=$("spot");
+    el.innerHTML="$"+f2(spot)+"<small>USD</small>";
+    el.classList.remove("up","down");
+    if(prev!=null&&spot!==prev) el.classList.add(spot>prev?"up":"down");
+    if(first!=null&&spot!==first){const d=spot-first;$("sess").textContent=(d>=0?"▲ +":"▼ −")+f2(Math.abs(d))+" since you opened this page"}
+    $("karats").innerHTML=KTS.map(k=>`<div class="k"><b>${k}K</b><span class="v num">${f2(perGram(k))}</span><span class="s num">${f2(perGram(k)*10)} / 10 g</span></div>`).join("");
+    calc();
+  }
+  function calc(){
+    if(spot==null) return;
+    const g=parseFloat($("grams").value)||0, q=g*perGram(+$("kt").value);
+    $("tQar").textContent=f2(q)+" QAR"; $("tUsd").textContent="≈ $"+f2(q/QAR);
+  }
+  async function tick(){
+    try{
+      const r=await fetch("https://api.gold-api.com/price/XAU",{cache:"no-store"});
+      if(!r.ok) throw new Error(r.status);
+      const j=await r.json(); if(typeof j.price!=="number") throw new Error("bad data");
+      prev=spot; spot=j.price; if(first==null) first=spot;
+      lastOk=Date.now();
+      render(); checkAlerts();
+      $("fresh").className="fresh live";
+    }catch(e){
+      $("fresh").className="fresh err";
+      $("freshTxt").textContent=lastOk?"Feed paused, retrying…":"Price feed unreachable, retrying…";
+    }
+  }
+  setInterval(()=>{if(lastOk&&$("fresh").classList.contains("live")){const s=Math.round((Date.now()-lastOk)/1000);$("freshTxt").textContent="Live · updated "+(s<2?"just now":s+" s ago")}},1000);
+  $("grams").addEventListener("input",calc); $("kt").addEventListener("change",calc);
+  renderAlerts(); tick();
+  /* A worker timer keeps ticking when the tab is minimized; browsers slow ordinary page timers in hidden tabs. */
+  let ticker=null;
+  try{
+    const src="setInterval(()=>postMessage(0),"+EVERY+")";
+    ticker=new Worker(URL.createObjectURL(new Blob([src],{type:"text/javascript"})));
+    ticker.onmessage=tick;
+    ticker.onerror=()=>{ticker=null;setInterval(tick,EVERY)};
+  }catch(e){ticker=null}
+  if(!ticker) setInterval(tick,EVERY);
+})();
+</script>
+</body>
+</html>

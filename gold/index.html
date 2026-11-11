@@ -80,7 +80,7 @@ footer{font-size:12px;color:var(--muted);max-width:65ch;line-height:1.6}
   </header>
 
   <div class="spot">
-    <div class="label">XAU / USD · spot per troy ounce · refreshes every 10 s</div>
+    <div class="label">XAU / USD · spot per troy ounce · refreshes every second</div>
     <div class="price num" id="spot">—</div>
     <div class="sub num" id="sess">Session change appears after the next update</div>
   </div>
@@ -122,12 +122,12 @@ footer{font-size:12px;color:var(--muted);max-width:65ch;line-height:1.6}
     </div>
   </section>
 
-  <footer>Spot price from gold-api.com; candle chart by TradingView. Alerts are checked every 10 seconds while this page is open, including when the tab is minimized. QAR rates use the fixed peg of 3.64 QAR per USD and pure-gold ratios (22K = 22/24). These are raw metal rates; jewellers add making charges and their own margin.</footer>
+  <footer>Spot price from gold-api.com; candle chart by TradingView. Alerts are checked every second while this page is open, including when the tab is minimized. QAR rates use the fixed peg of 3.64 QAR per USD and pure-gold ratios (22K = 22/24). These are raw metal rates; jewellers add making charges and their own margin.</footer>
 </div>
 
 <script>
 (function(){
-  const OZ=31.1035, QAR=3.64, KTS=[24,22,21,18], EVERY=10000;
+  const OZ=31.1035, QAR=3.64, KTS=[24,22,21,18], EVERY=1000;
   const $=id=>document.getElementById(id);
   const f2=n=>n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
   let spot=null, first=null, prev=null, lastOk=0;
@@ -162,13 +162,14 @@ footer{font-size:12px;color:var(--muted);max-width:65ch;line-height:1.6}
   $("lvl").addEventListener("keydown",e=>{if(e.key==="Enter") $("add").click()});
 
   function checkAlerts(){
+    let changed=false;
     for(const a of alerts){
       if(a.hit) continue;
       if((a.dir==="up"&&spot>=a.level)||(a.dir==="down"&&spot<=a.level)){
-        a.hit=true; fire(a);
+        a.hit=true; changed=true; fire(a);
       }
     }
-    save(); renderAlerts();
+    if(changed){save(); renderAlerts();}
   }
 
   /* ---------- notify: desktop, sound, banner, tab title ---------- */
@@ -225,19 +226,25 @@ footer{font-size:12px;color:var(--muted);max-width:65ch;line-height:1.6}
     const g=parseFloat($("grams").value)||0, q=g*perGram(+$("kt").value);
     $("tQar").textContent=f2(q)+" QAR"; $("tUsd").textContent="≈ $"+f2(q/QAR);
   }
+  let busy=false, waitUntil=0, fails=0;
   async function tick(){
+    if(busy||Date.now()<waitUntil) return;
+    busy=true;
     try{
       const r=await fetch("https://api.gold-api.com/price/XAU",{cache:"no-store"});
       if(!r.ok) throw new Error(r.status);
       const j=await r.json(); if(typeof j.price!=="number") throw new Error("bad data");
       prev=spot; spot=j.price; if(first==null) first=spot;
       lastOk=Date.now();
-      render(); checkAlerts();
+      fails=0;
+      if(spot!==prev) render();
+      checkAlerts();
       $("fresh").className="fresh live";
     }catch(e){
+      fails++; waitUntil=Date.now()+Math.min(30000,2000*fails);
       $("fresh").className="fresh err";
       $("freshTxt").textContent=lastOk?"Feed paused, retrying…":"Price feed unreachable, retrying…";
-    }
+    }finally{busy=false}
   }
   setInterval(()=>{if(lastOk&&$("fresh").classList.contains("live")){const s=Math.round((Date.now()-lastOk)/1000);$("freshTxt").textContent="Live · updated "+(s<2?"just now":s+" s ago")}},1000);
   $("grams").addEventListener("input",calc); $("kt").addEventListener("change",calc);
